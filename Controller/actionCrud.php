@@ -17,21 +17,17 @@ if(isset($_POST["action"]))
     if($_POST["action"] == "Ekle")
     {
         $ad = mysqli_real_escape_string($object->connect, $_POST["ad"]);
+        $ad = filter_var($ad, FILTER_SANITIZE_STRING);
         $soyad =  mysqli_real_escape_string($object->connect, $_POST["soyad"]);
+        $soyad = filter_var($soyad, FILTER_SANITIZE_STRING);
         $bolum =  mysqli_real_escape_string($object->connect, $_POST["bolum"]);
-        $options = array('options'=> array('min_range'=>1, 'max_range'=>3));
-        $bolum = filter_input(INPUT_POST, 'bolum', FILTER_VALIDATE_INT, $options);
+        $bolum = filter_input($bolum,FILTER_VALIDATE_INT);
+        if(!$bolum){echo "bölüm alanına hatalı giriş yaptınız, bölüm eklenmeyecek!";}
 
-        if (is_null($bolum)) {
-            echo "Bölüm alanı boş bırakılamaz.<br />";
-        } elseif ($bolum === FALSE) {
-            echo "Bölüm 1 ile 3 arası bir tamsayı olmalıdır <br />";
-        }
-        $query = "INSERT INTO ogrenciler (ad, soyad, bolum) 
-VALUES ('".$ad."', '".$soyad."', '".$bolum."')";
-        $object->execute_query($query);
+           $query = "INSERT INTO ogrenciler (ad, soyad, bolum) VALUES ('" . $ad . "', '" . $soyad . "', '" . $bolum . "')";
+           $object->execute_query($query);
+           echo 'Veri Eklendi';
 
-        echo 'Veri Eklendi';
     }
     if($_POST["action"] == "Veri Al")
     {

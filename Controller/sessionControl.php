@@ -1,16 +1,26 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ASUS
- * Date: 1.4.2018
- * Time: 01:09
- */
 
 session_start();
-if(!isset($_SESSION['kullaniciAd']) || (time()-$_SESSION['sure'])>10*3)
+
+if(!isset($_SESSION['baglanti']))
 {
-    session_destroy();
-    header("location:login.php");
+
+    echo "Yetkili kullanıcı değilsiniz....Giriş yapmanız gerekiyor
+				<a href=\"../login.html\" >Giriş</a>";
+
+    exit();
+
 }
-$_SESSION['sure']=time();
-?>
+
+$oturumOmru = 10*60; // Oturum süresi 10 dk.
+
+if (isset($_SESSION['baslangicZamani']))
+{
+    $oturumSuresi = time() - $_SESSION['baslangicZamani'];
+    if ($oturumSuresi > $oturumOmru)
+    {
+        echo "Oturum süreniz dolmuştur...";
+        header("Location: logout.php");
+    }
+}
+$_SESSION['baslangicZamani'] = time();

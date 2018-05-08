@@ -9,51 +9,69 @@
 require_once '../classes/DataBaseConnection.php';
 include '../Model/DBConnection.php';
 $object = new DataBaseConnection();
-//session_start();
+session_start();
+
 if(isset($_POST['admin'])){
 
-    $admin = $_POST['admin'];
-    }
+    // $admin = $_POST['admin'];
+    $kullanici= $_POST['admin'];
+}
 elseif(isset($_POST['akademik_per'])){
-
-    $akademik_per = $_POST['akademik_per'];
+    $kullanici= $_POST['akademik_per'];
+    //$akademik_per = $_POST['akademik_per'];
 }
 elseif(isset($_POST['ogrenci'])){
-
-    $ogrenci = $_POST['ogrenci'];
+    $kullanici = $_POST['ogrenci'];
+    //$ogrenci = $_POST['ogrenci'];
 }
 
 $kullaniciAdi = $_POST['kullaniciAdi'];
-//$kullaniciAdi = filter_var($kullaniciAdi, FILTER_SANITIZE_ENCODED);
-
 $sifre = $_POST['sifre'];
 $sql= $pdo->prepare("select* from uyeler where kullaniciAdi = ? and sifre = ?");
 $sql->execute(array($kullaniciAdi,md5($sifre)));
 $islem=$sql->fetch();
 
-foreach( $sql as $row ){
-    $islem = $row;
-}
-        if ($islem && $akademik_per) {
-            $_SESSION['kullaniciAdi'] = $islem['kullaniciAdi'];
-            $_SESSION['sifre'] = $islem['sifre'];
-            header('location:../View/Home.php');
-        } elseif ($islem  && $admin) {
-            $_SESSION['kullaniciAdi'] = $islem['kullaniciAdi'];
-            $_SESSION['sifre'] = $islem['sifre'];
-            header('location ""');
-        } elseif ($islem  && $ogrenci) {
-            $_SESSION['kullaniciAdi'] = $islem['kullaniciAdi'];
-            $_SESSION['sifre'] = $islem['sifre'];
-            header('location:../View/Home1.php');
-        } else {
-            $hata = $sql->errorInfo();
-            //$hata = $query->errorInfo();
-            echo "$hata[2]";
-            //echo empty($hata[2]) ? "Başarılı Bir Şekilde Çalıştı." : $hata[2];
-            echo"hata oluştu";
-        }
-//}
+    switch ($kullanici) {
+        case $_POST['akademik_per']:
+            if ($islem) {
+                $_SESSION['yetki'] = 1;
+                $_SESSION['baglanti'] = true;
+                $_SESSION['baslangicZamani'] = time();
+                // $_SESSION['kullaniciAdi'] = $kullaniciAdi;
+                header('location:../View/Home.php');
+                break;
+            } else {
+
+                header('location:sessionControl.php');
+                break;
+            }
+        case $_POST['admin']:
+            if ($islem) {
+                $_SESSION['yetki'] = 2;
+                $_SESSION['baglanti'] = true;
+                $_SESSION['baslangicZamani'] = time();
+                //$_SESSION['kullaniciAdi'] = $kullaniciAdi;
+                header('location:../View/Home1.php');
+                break;
+            } else {
+
+                header('location:sessionControl.php');
+                break;
+            }
+        case $_POST['ogrenci']:
+            if ($islem) {
+                $_SESSION['yetki'] = 3;
+                $_SESSION['baglanti'] = true;
+                $_SESSION['baslangicZamani'] = time();
+                //$_SESSION['kullaniciAdi'] = $kullaniciAdi;
+                header('location:../View/kontrolPaneli.php');
+                break;
+            } else {
+
+                header('location:sessionControl.php');
+                break;
+            }
+    }
+
+
 ?>
-
-

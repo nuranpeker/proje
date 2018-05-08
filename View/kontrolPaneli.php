@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../controller/sessionControl.php';
-if($_SESSION['yetki']!=3){
+if($_SESSION['yetki']!=2){
     echo "Bu sayfayı görüntüleme yetkiniz yok";
     exit;
 }
@@ -31,9 +31,9 @@ if($_SESSION['yetki']!=3){
     <div id="home" align="center" >
         <form id="home" method="post" action="login.php" >
             <br><br>
-            <input style="height: 40px" type="text" name="ders_ekle" id="ders_ekle" size="40" placeholder="Ders Ekle"><br><br>
-            <input style="height: 40px" type="text" name="ders_cikar"  id="ders_cikar"  size="40" placeholder="Ders Çıkar"><br><br>
-            <input style="height: 40px" type="text" name="not_goruntule"  id="not_goruntule" size="40" placeholder="Not Görüntüle">
+            <input style="height: 40px" type="text" name="ders_ekle" id="ders_ekle" size="40" placeholder="Öğrenci Belgesi"><br><br>
+            <input style="height: 40px" type="text" name="ders_cikar"  id="ders_cikar"  size="40" placeholder="Akademik Personel Görüntüle"><br><br>
+            <input style="height: 40px" type="text" name="not_goruntule"  id="not_goruntule" size="40" placeholder="Yıllık Kayıtlar">
 
         </form>
     </div>

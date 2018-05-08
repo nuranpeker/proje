@@ -6,10 +6,16 @@
  * Time: 00:55
  */
 
-//include 'classes/DataBaseConnection.php';
+
 include '../classes/DataBaseConnection.php';
 include '../classes/DBCrud.php';
 $object = new DBCrud();
+//session_start();
+require_once '../Controller/sessionControl.php';
+if($_SESSION['yetki']!=1){
+    echo "Bu sayfayı görüntüleme yetkiniz yok";
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
